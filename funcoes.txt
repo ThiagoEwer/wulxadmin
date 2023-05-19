@@ -14,6 +14,34 @@ CREATE TABLE usuarios (
   usu_nivel INTEGER NOT NULL,
   usu_bloqueado BOOLEAN NOT NULL
 );
+==================================================================================================================
+Procedimento para resetar os ID's da tabela:
+
+-- Desativa a geração automática de valores para a coluna "usu_id"
+ALTER TABLE usuarios ALTER COLUMN usu_id DROP DEFAULT;
+
+-- Remove a sequência atualmente associada à coluna "usu_id" (se existir)
+DROP SEQUENCE IF EXISTS usuarios_usu_id_seq;
+
+-- Cria uma nova sequência para a coluna "usu_id" começando em 1
+CREATE SEQUENCE usuarios_usu_id_seq START 1;
+
+-- Altera os IDs existentes para seguir a sequência contínua
+WITH cte AS (
+  SELECT usu_id, ROW_NUMBER() OVER (ORDER BY usu_id) AS new_id
+  FROM usuarios
+)
+UPDATE usuarios
+SET usu_id = cte.new_id
+FROM cte
+WHERE usuarios.usu_id = cte.usu_id;
+
+-- Reinicia o valor atual da sequência para o próximo número disponível
+SELECT setval('usuarios_usu_id_seq', (SELECT MAX(usu_id) FROM usuarios));
+
+
+//colocar direto na edição da coluna, onde tem defalt value 
+nextval('usuarios_usu_id_seq'::regclass) // comando da coluna ID
 
 Funções do CRUD que funcionaram:
 ===================================================================================================================

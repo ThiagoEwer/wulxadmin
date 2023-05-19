@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wulxadmin/view/user_add.dart';
-import 'user_details.dart';
+import '../controller/user_controller.dart';
 
 class UsersScreen extends StatefulWidget {
   const UsersScreen({Key? key}) : super(key: key);
@@ -14,76 +14,24 @@ class UsersScreen extends StatefulWidget {
 class _UsersScreenState extends State<UsersScreen> {
   final supabase = Supabase.instance.client;
   late TextEditingController _searchController;
+  late UsersController _usersController;
+
+//callback para atualizar o status do usuário
+  void _toggleUserStatus(Map<String, dynamic> user) {
+    _usersController.toggleUserStatus(user, () {
+      setState(() {
+        // Atualize a exibição do usuário com o novo status
+        user['usu_bloqueado'] = !(user['usu_bloqueado'] ?? false);
+      });
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController();
+    _usersController = UsersController(context);
+    _searchController = TextEditingController(); // Passe o contexto aqui
   }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  void _showUserDetails(Map<String, dynamic> user) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return UserDetailScreen(user: user);
-      },
-    );
-  }
-
-  void _searchUsers(String query) {
-    // Lógica para filtrar os usuários com base na pesquisa
-    // Atualize a exibição da lista com os resultados da pesquisa
-  }
-
-  void _viewUser() {
-    // Lógica para visualizar o usuário selecionado
-  }
-
-  void _editUser() {
-    // Lógica para editar o usuário selecionado
-  }
-
-  void _deleteUser() async {
-    // Lógica para excluir o usuário
-  }
-   //mudar o status de bloqueado
-  void _toggleUserStatus(Map<String, dynamic> user) async {
-  final updatedUser = user;
-  final blocked = user['usu_bloqueado'] ?? false;
-  updatedUser['usu_bloqueado'] = !blocked;
-
-  try {
-    final response = await supabase
-        .from('usuarios')
-        .update(updatedUser)
-        .match({'usu_id': user['usu_id']});
-
-    if (response != null) {
-      if (response.error != null) {
-        // Trate o erro ao atualizar o usuário
-        print('Erro ao atualizar o usuário: ${response.error}');
-        return;
-      }
-    } else {
-      // Trate o caso em que a resposta é nula
-      print('Erro ao atualizar o usuário: resposta nula');
-    }
-
-    // Atualize a exibição do usuário com o novo status
-    setState(() {
-      user['usu_bloqueado'] = !blocked;
-    });
-  } catch (error) {
-    // Trate o erro ao atualizar o usuário
-    print('Erro ao atualizar o usuário: $error');
-  }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +58,6 @@ class _UsersScreenState extends State<UsersScreen> {
                         IconButton(
                           onPressed: () {
                             // Lógica para realizar a pesquisa
-                            _searchUsers(_searchController.text);
                           },
                           icon: const Icon(Icons.search),
                         ),
@@ -139,15 +86,15 @@ class _UsersScreenState extends State<UsersScreen> {
                   icon: const Icon(Icons.add),
                 ),
                 IconButton(
-                  onPressed: _viewUser,
+                  onPressed: (){},
                   icon: const Icon(Icons.remove_red_eye),
                 ),
                 IconButton(
-                  onPressed: _editUser,
+                  onPressed: () {},
                   icon: const Icon(Icons.edit),
                 ),
                 IconButton(
-                  onPressed: _deleteUser,
+                  onPressed: (){},
                   icon: const Icon(Icons.delete),
                 ),
               ],
@@ -157,18 +104,7 @@ class _UsersScreenState extends State<UsersScreen> {
             child: _buildUserList(),
           ),
         ],
-      ), /*
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const AddUserDialog();
-            },
-          );
-        },
-        child: const Icon(Icons.add),
-      ), */
+      ), 
     );
   }
 
@@ -207,7 +143,7 @@ class _UsersScreenState extends State<UsersScreen> {
                       value: !blocked,
                       onChanged: (value) => _toggleUserStatus(user),
                     ),
-                    onTap: () => _showUserDetails(user),
+                    onTap: () => _usersController.showUserDetails(user),
                   ),
                 );
               },
