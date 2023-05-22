@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import './users_screen.dart';
+import 'package:wulxadmin/Empresas/view/empr_screen.dart';
+import 'Usuarios/view/users_screen.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({super.key});
@@ -71,7 +72,7 @@ class _DashBoardState extends State<DashBoard> {
       case 0:
         return const UsersScreen();
       case 1:
-        return const Center(child: Text('Página de Empresas'));
+        return const EmpresasScreen();
       case 2:
         return const Center(child: Text('Página de API\'s Links'));
       case 3:
