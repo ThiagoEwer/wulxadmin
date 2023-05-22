@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wulxadmin/view/users_screen.dart';
+import './users_screen.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({super.key});

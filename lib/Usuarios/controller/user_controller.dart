@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../view/user_details.dart';
+import '../view/components/user_details.dart';
 
 class UsersController {
   final BuildContext context;
@@ -14,7 +14,6 @@ class UsersController {
 
   void dispose() {
     _searchController.dispose();
-
   }
 
   // Lógica para exibir detalhes do usuário
@@ -26,9 +25,10 @@ class UsersController {
       },
     );
   }
-  
+
   //mudar o status de bloqueado
- void toggleUserStatus(Map<String, dynamic> user, VoidCallback setStateCallback) async {
+  void toggleUserStatus(
+      Map<String, dynamic> user, VoidCallback setStateCallback) async {
     final updatedUser = user;
     final blocked = user['usu_bloqueado'] ?? false;
     updatedUser['usu_bloqueado'] = !blocked;
@@ -59,6 +59,4 @@ class UsersController {
 
   // CRUD
 //colocar aqui a função de adicionar usuário e excluir
-
-
 }

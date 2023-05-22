@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wulxadmin/view/dashboard.dart';
+import 'Usuarios/view/dashboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

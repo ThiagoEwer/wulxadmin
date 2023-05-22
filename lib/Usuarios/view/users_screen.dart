@@ -1,8 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api, deprecated_member_use, unused_element
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wulxadmin/view/user_add.dart';
 import '../controller/user_controller.dart';
+import 'components/user_add.dart';
+import 'components/user_edit.dart';
 
 class UsersScreen extends StatefulWidget {
   const UsersScreen({Key? key}) : super(key: key);
@@ -24,6 +25,16 @@ class _UsersScreenState extends State<UsersScreen> {
         user['usu_bloqueado'] = !(user['usu_bloqueado'] ?? false);
       });
     });
+  }
+  
+//callback para editar usuário
+  void _editUser(Map<String, dynamic> user) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditUserScreen(user: user),
+      ),
+    );
   }
 
   @override
@@ -86,16 +97,13 @@ class _UsersScreenState extends State<UsersScreen> {
                   icon: const Icon(Icons.add),
                 ),
                 IconButton(
-                  onPressed: (){},
-                  icon: const Icon(Icons.remove_red_eye),
+                  onPressed: () {
+                  },
+                  icon: const Icon(Icons.refresh),
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.edit),
-                ),
-                IconButton(
-                  onPressed: (){},
-                  icon: const Icon(Icons.delete),
+                  icon: const Icon(Icons.remove_red_eye),
                 ),
               ],
             ),
@@ -104,7 +112,7 @@ class _UsersScreenState extends State<UsersScreen> {
             child: _buildUserList(),
           ),
         ],
-      ), 
+      ),
     );
   }
 
@@ -139,9 +147,20 @@ class _UsersScreenState extends State<UsersScreen> {
                         Text('Empresa: ${user['usu_empresa']}'),
                       ],
                     ),
-                    trailing: Switch(
-                      value: !blocked,
-                      onChanged: (value) => _toggleUserStatus(user),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Switch(
+                          value: !blocked,
+                          onChanged: (value) => _toggleUserStatus(user),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            _editUser(user);
+                          },
+                        ),
+                      ],
                     ),
                     onTap: () => _usersController.showUserDetails(user),
                   ),
