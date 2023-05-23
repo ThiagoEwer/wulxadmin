@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'dashboard.dart';
+import 'Menu/dashboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

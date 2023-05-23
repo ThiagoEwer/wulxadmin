@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wulxadmin/Empresas/view/empr_screen.dart';
-import 'Usuarios/view/users_screen.dart';
+import 'package:wulxadmin/2-Empresas/view/empr_screen.dart';
+import 'package:wulxadmin/4-M%C3%B3dulos/module.dart';
+import '../1-Usuarios/view/users_screen.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({super.key});
@@ -51,6 +52,10 @@ class _DashBoardState extends State<DashBoard> {
                 label: Text("API's Links"),
               ),
               NavigationRailDestination(
+                icon: Icon(Icons.account_tree_rounded),
+                label: Text("Módulos"),
+              ),
+              NavigationRailDestination(
                 icon: Icon(Icons.settings),
                 label: Text("Configurações"),
               ),
@@ -76,7 +81,9 @@ class _DashBoardState extends State<DashBoard> {
       case 2:
         return const Center(child: Text('Página de API\'s Links'));
       case 3:
-        return const Center(child: Text('Página de Configurações'));
+        return ModuleScreen();
+      case 4:
+        return const Center(child: Text('Página de configurações'));
       default:
         return Container();
     }
